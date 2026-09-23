@@ -1,17 +1,19 @@
 pipeline {
-    agent { docker { image 'node:24.21.0-alpine3.24' } }
- environment {
-        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    agent {
+        label '!windows'
+    }
+
+    environment {
+        DISABLE_AUTH = 'true'
+        DB_ENGINE    = 'sqlite'
     }
 
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
-                sh 'node --version'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
+                echo "Database engine is ${DB_ENGINE}"
+                echo "DISABLE_AUTH is ${DISABLE_AUTH}"
+                sh 'printenv'
             }
         }
     }

@@ -1,18 +1,15 @@
 pipeline {
-    agent { docker { image 'node:24.21.0-alpine3.24' } }
- environment {
-        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-    }
-
+    agent any
     stages {
-        stage('build') {
+        stage('Test') {
             steps {
-                sh 'node --version'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
+                sh './gradlew check'
             }
+        }
+    }
+    post {
+        always {
+            junit 'build/reports/**/*.xml'
         }
     }
 }
